@@ -32,7 +32,7 @@ public class Reader {
 
     private void mapSyllabesForWords(String wholeText) {
         words = Arrays.asList(wholeText.split(" "));
-        wordsToSyllablesNumber = words.stream()
+        wordsToSyllablesNumber = words.parallelStream()
                 .map(String::trim)
                 .collect(Collectors.toMap(
                         c -> c,
@@ -43,13 +43,19 @@ public class Reader {
     public void startReading() {
         for (String currentWord : words) {
             Platform.runLater(() -> mainLabel.setText(currentWord));
-            delayWord();
+            delayWord(currentWord);
         }
     }
 
-    private void delayWord() {
+    private void delayWord(String currentWord) {
+        int baseAdditionalDelay = 50;
+        int calculatedAdditionalDelay =
+                baseAdditionalDelay * wordsToSyllablesNumber.get(currentWord);
+        if(currentWord.contains(".")) {
+            calculatedAdditionalDelay += 100;
+        }
         try {
-            Thread.sleep(delay);
+            Thread.sleep(delay + calculatedAdditionalDelay);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

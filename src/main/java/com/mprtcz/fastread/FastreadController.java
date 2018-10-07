@@ -35,11 +35,13 @@ public class FastreadController {
     private Reader reader;
 
     @FXML
-    void onSpeedSliderDragDetected(MouseEvent event) {}
+    void onSpeedSliderDragDetected(MouseEvent event) {
+        reader.changeDelay(speedSlider.getMax() - speedSlider.getValue());
+    }
 
     @FXML
     void onSpeedSliderDragDone(MouseEvent event) {
-        reader.changeDelay(speedSlider.getValue());
+        reader.changeDelay(speedSlider.getMax() - speedSlider.getValue());
     }
 
     @FXML
