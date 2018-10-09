@@ -1,8 +1,5 @@
 package com.mprtcz.fastread.reader;
 
-import javafx.application.Platform;
-import javafx.scene.control.Label;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,22 +12,22 @@ public class Reader {
     List<String> words = new ArrayList<>();
     String wholeText;
     SyllablesResovler syllablesResovler;
-    Label mainLabel;
+    Labeler labeler;
     private static final int INITIAL_DELAY = 500;
     private int delay = INITIAL_DELAY;
+    private boolean stopped;
 
-    public Reader(String wholeText, SyllablesResovler syllablesResovler, Label mainLabel) {
+    public Reader(String wholeText, SyllablesResovler syllablesResovler, Labeler labeler) {
         this.wholeText = wholeText;
         this.syllablesResovler = syllablesResovler;
-        this.mainLabel = mainLabel;
+        this.labeler = labeler;
         if(wholeText == null) {
             wholeText = WORDS;
         }
-
-        mapSyllabesForWords(wholeText);
+        mapSyllablesForWords(wholeText);
     }
 
-    private void mapSyllabesForWords(String wholeText) {
+    private void mapSyllablesForWords(String wholeText) {
         words = Arrays.asList(wholeText.split(" "));
         wordsToSyllablesNumber = words.parallelStream()
                 .map(String::trim)
@@ -41,9 +38,22 @@ public class Reader {
     }
 
     public void startReading() {
-        for (String currentWord : words) {
-            Platform.runLater(() -> mainLabel.setText(currentWord));
+        stopped = false;
+        for (int i = 0; i < words.size(); i++) {
+            if (i > 0) {
+                labeler.setPreviousWord(words.get(i-1));
+            }
+            String currentWord = words.get(i);
+            labeler.setCurrentWord(currentWord);
+            if (i < words.size() - 1) {
+                labeler.setNextWord(words.get(i+1));
+            } else {
+                labeler.setNextWord("");
+            }
             delayWord(currentWord);
+            if (stopped) {
+                break;
+            }
         }
     }
 
@@ -80,5 +90,9 @@ public class Reader {
 
     public void changeDelay(double value) {
         this.delay = (int) value;
+    }
+
+    public void stop() {
+        stopped = true;
     }
 }

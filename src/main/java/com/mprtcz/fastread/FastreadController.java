@@ -1,5 +1,6 @@
 package com.mprtcz.fastread;
 
+import com.mprtcz.fastread.reader.Labeler;
 import com.mprtcz.fastread.reader.Reader;
 import com.mprtcz.fastread.reader.SyllablesResovler;
 import javafx.event.ActionEvent;
@@ -21,7 +22,11 @@ public class FastreadController {
     private TextFlow mainTextFlow;
 
     @FXML
+    private Label previousWordLabel;
+    @FXML
     private Label mainLabel;
+    @FXML
+    private Label nextWordLabel;
 
     @FXML
     private Button startButton;
@@ -33,6 +38,8 @@ public class FastreadController {
     private Slider speedSlider;
 
     private Reader reader;
+
+    private Labeler labeler;
 
     @FXML
     void onSpeedSliderDragDetected(MouseEvent event) {
@@ -46,8 +53,16 @@ public class FastreadController {
 
     @FXML
     void onStartButtonClicked(ActionEvent event)  {
-        reader = new Reader(null, new SyllablesResovler(), mainLabel);
+        labeler = new Labeler(previousWordLabel, mainLabel, nextWordLabel);
+        reader = new Reader(null, new SyllablesResovler(), labeler);
         new Thread(reader::startReading).start();
+    }
+
+    @FXML
+    void onStopButtonClicked(ActionEvent event)  {
+        if (reader != null) {
+            reader.stop();
+        }
     }
 
 }

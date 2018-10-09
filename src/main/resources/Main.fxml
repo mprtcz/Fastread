@@ -7,7 +7,8 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mprtcz.fastread.FastreadController">
    <center>
@@ -16,8 +17,20 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </BorderPane.margin>
          <children>
-            <Label fx:id="mainLabel" />
-            <TextFlow fx:id="mainTextFlow" lineSpacing="5.0" prefHeight="200.0" prefWidth="200.0" textAlignment="CENTER" />
+            <Label fx:id="previousWordLabel" />
+            <VBox alignment="CENTER">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+               <children>
+                  <Label fx:id="mainLabel" alignment="CENTER" contentDisplay="CENTER" textAlignment="CENTER">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <Label fx:id="nextWordLabel" alignment="CENTER_RIGHT" />
          </children>
       </HBox>
    </center>
@@ -27,6 +40,7 @@
             <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClicked" text="Start" />
             <Label text="TextProgress" />
             <ProgressBar fx:id="textProgressBar" prefWidth="200.0" progress="0.0" />
+            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#onStopButtonClicked" text="Stop" />
          </children>
          <opaqueInsets>
             <Insets />
